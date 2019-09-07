@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 function Navbar () {
 
-  const [count, setCount] = useState(0);
 
   return (
   <nav>

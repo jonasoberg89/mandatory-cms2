@@ -12,8 +12,8 @@ function App() {
       <div className="App">
         <Navbar />
         <Route exact path="/" component={Home}></Route>
-        {/* <Route path="/details/:id" component={Details}></Route>
-        <Route path="/cart/:id" component={Cart}></Route> */}
+         <Route path="/details/:id" component={Details}></Route>
+        {/* <Route path="/cart/:id" component={Cart}></Route> */}
       </div>
     </BrowserRouter>
 

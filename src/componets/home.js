@@ -5,28 +5,52 @@ import axios from "axios";
 function Home() {
 
     const [data, setData] = useState([]);
-    const[checked, setChecked] =useState(false);
+    const [checked, setChecked] = useState(false);
+    const [search, setSearch] = useState("");
+    const [perPage, setPerPage] = useState(0);
+    const pageNumbers = [];
+    const[pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
-        if(!checked){
-        let fetchData = async () => {
-            let result = await axios(
-                'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c',
-            );
-            setData(result.data.entries);
-        };
-        fetchData();
-    }else{
-        let fetchData = async () => {
-            let result = await axios(
-                'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c&filter[amount][$gte]=1',
-            );
-            setData(result.data.entries);
-        };
-        fetchData();
+        console.log("tjena")
+        if (!checked) {
+            let fetchData = async () => {
+                let result = await axios(
+                    'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c&limit=9&skip='+pageNumber+'&filter[name][$regex]=' + search
+                );
+                setData(result.data.entries);
+                setPerPage(Math.ceil(result.data.entries.length / 9));
+            };
+            fetchData();
+        } else {
+            let fetchData = async () => {
+                let result = await axios(
+                    'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c&filter[amount][$gte]=1',
+                );
+                setData(result.data.entries);
+            };
+            fetchData();
 
+        }
+        return () => {
+            console.log("Unmount");
+        }
+    }, [checked, search]);
+
+    function pagination(){
+
+        for (let i = 1; i <= perPage; i++) {
+            pageNumbers.push(i);
+        }
+        console.log(pageNumbers)
+        const renderPageNumbers = pageNumbers.map(number => {
+            return (
+                <li key={number} onClick={(number)=>{setPageNumber(number)}} className="active"><a href="#!"id={number}>{number}</a></li>
+            )
+        });
+        return renderPageNumbers
     }
-    }, [checked]);
+ 
 
 
     return (
@@ -36,28 +60,18 @@ function Home() {
                 <div className="col s4">
                     <div className="input-field">
                         <input id="input_text"
-                            autoComplete="off"
-                            minLength="1"
-                            maxLength="40"
-                            type="text" data-length="20" />
+                            value={search}
+                            onChange={event => setSearch(event.target.value)}
+                            type="text" />
                         <label htmlFor="textarea1">Search</label>
                     </div>
                 </div>
                 <div className="col s4"></div>
                 <div className="col s12">
-                    <ul className="pagination center">
-                        <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
-                        <li className="active"><a href="#!">1</a></li>
-                        <li className="waves-effect"><a href="#!">2</a></li>
-                        <li className="waves-effect"><a href="#!">3</a></li>
-                        <li className="waves-effect"><a href="#!">4</a></li>
-                        <li className="waves-effect"><a href="#!">5</a></li>
-                        <li className="waves-effect"><a href="#!"><i className="material-icons">chevron_right</i></a></li>
-                    </ul>
                     <form className="center" action="">
                         <p>
                             <label>
-                                <input onChange={(e)=>setChecked(!checked)} type="checkbox" id="check" className="filled-in" checked={checked} />
+                                <input onClick={(e) => setChecked(!checked)} type="checkbox" id="check" className="filled-in" checked={checked} />
                                 <span htmlFor="check">Finns i lager</span>
                             </label>
                         </p>
@@ -65,6 +79,15 @@ function Home() {
                 </div>
             </div>
             <Body beer={data} />
+                <div className="col s12">
+                    <ul className="pagination center">
+                        <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
+                        {
+                            pagination()
+                        }
+                        <li className="waves-effect"><a href="#!"><i className="material-icons">chevron_right</i></a></li>
+                    </ul>
+                </div>
         </div>
     );
 }
