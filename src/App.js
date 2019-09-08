@@ -4,16 +4,15 @@ import Home from "./componets/home";
 import Navbar from "./componets/navbar";
 import Details from "./componets/details"
 import Cart from "./componets/cart";
+import {updateToken} from "./componets/storage";
 function App() {
-
-
   return (
     <BrowserRouter>
       <div className="App">
         <Navbar />
         <Route exact path="/" component={Home}></Route>
-         <Route path="/details/:id" component={Details}></Route>
-        {/* <Route path="/cart/:id" component={Cart}></Route> */}
+        <Route path="/details/:id" component={Details}></Route>
+        <Route  path="/cart/" component={Cart}></Route>
       </div>
     </BrowserRouter>
 

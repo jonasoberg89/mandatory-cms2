@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import {newItem} from "./cart";
 function Details(props) {
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([])
+    const [amount, setAmount] = useState(0)
     let productId = props.match.params.id
+    const [item , setItem] = useState([])
 
     useEffect(() => {
         console.log(productId)
@@ -23,6 +26,13 @@ function Details(props) {
           }
     }, []);
 
+    function addToCart(){
+        setItem({
+            name:data.name,
+            amount: amount
+        })
+    }
+
     return (
         <div className="row">
             <div className="col s2"></div>
@@ -30,21 +40,28 @@ function Details(props) {
                 {loading ? <div className="progress"><div className="indeterminate"></div></div>
                     :
 
-                    <div class="col s12 ">
-                        <h2 class="header center">{data.name}</h2>
-                        <div class="card horizontal medium">
-                            <div class="card-image">
+                    <div className="col s12 ">
+                        <h2 className="header center">{data.name}</h2>
+                        <div className="card horizontal medium">
+                            <div className="card-image">
                                 <img src={"http://localhost:8080/" + data.image.path} alt=""/>
                             </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
+                            <div className="card-stacked">
+                                <div className="card-content">
                                     <p>{data.description}</p>
                                     <br/>
                                     <p>Lagersaldo: {data.amount}st</p>
                                     <h2>{data.price}:-</h2>
                                 </div>
-                                <div class="card-action">
-                                    <a href="/">Lägg till i varukorgen</a>
+                                <div className="card-action">
+                                <div className="col s2">
+                                <input 
+                                    onChange={(e)=>setAmount(e.target.value)}
+                                    placeholder="välj antal" 
+                                    type="number" min="1" 
+                                    max="100"/>
+                                </div>
+                                <a onClick={addToCart} class="waves-effect waves-light btn right">LÄGG TILL I VARUKORG</a>
                                 </div>
                             </div>
                         </div>

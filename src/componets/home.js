@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from "./body";
 import axios from "axios";
+import {updateToken} from "./storage";
 
 function Home() {
 
