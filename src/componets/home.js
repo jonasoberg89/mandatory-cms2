@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from "./body";
 import axios from "axios";
-import {updateToken} from "./storage";
+
 
 function Home() {
 
@@ -52,8 +52,6 @@ function Home() {
         return renderPageNumbers
     }
  
-
-
     return (
         <div>
             <div className="row">
@@ -72,7 +70,7 @@ function Home() {
                     <form className="center" action="">
                         <p>
                             <label>
-                                <input onClick={(e) => setChecked(!checked)} type="checkbox" id="check" className="filled-in" checked={checked} />
+                                <input onChange={(e) => setChecked(!checked)} type="checkbox" id="check" className="filled-in" checked={checked} />
                                 <span htmlFor="check">Finns i lager</span>
                             </label>
                         </p>

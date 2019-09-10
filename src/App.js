@@ -4,7 +4,6 @@ import Home from "./componets/home";
 import Navbar from "./componets/navbar";
 import Details from "./componets/details"
 import Cart from "./componets/cart";
-import {updateToken} from "./componets/storage";
 function App() {
   return (
     <BrowserRouter>
@@ -16,7 +15,7 @@ function App() {
       </div>
     </BrowserRouter>
 
-  );
+  );  
 }
 
 export default App;

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import {newItem} from "./cart";
 function Details(props) {
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([])
     const [amount, setAmount] = useState(0)
     let productId = props.match.params.id
-    const [item , setItem] = useState([])
+    const [item, setItem] = useState([])
 
     useEffect(() => {
         console.log(productId)
@@ -23,14 +22,32 @@ function Details(props) {
         return () => {
             console.log("Unmount");
             setLoading(true);
-          }
-    }, []);
+        }
+    }, [productId]);
 
-    function addToCart(){
-        setItem({
-            name:data.name,
-            amount: amount
-        })
+
+    useEffect(() => {
+       let data = JSON.parse(localStorage.getItem("products"));
+       if(!data){
+        window.localStorage.setItem('products', JSON.stringify(item));
+       }else{
+           if(!item.length)return;
+        data.push(item[0])
+             window.localStorage.setItem('products', JSON.stringify(data));
+             var result = JSON.parse(localStorage.getItem("products"));
+             console.log(result);
+       }
+        
+    }, [item])
+
+    function addToCart() {
+        setAmount(0);
+        setItem(item => [...item, {
+            name: data.name,
+            amount: amount,
+            price: data.price
+        }])
+
     }
 
     return (
@@ -44,24 +61,25 @@ function Details(props) {
                         <h2 className="header center">{data.name}</h2>
                         <div className="card horizontal medium">
                             <div className="card-image">
-                                <img src={"http://localhost:8080/" + data.image.path} alt=""/>
+                                <img src={"http://localhost:8080/" + data.image.path} alt="" />
                             </div>
                             <div className="card-stacked">
                                 <div className="card-content">
                                     <p>{data.description}</p>
-                                    <br/>
+                                    <br />
                                     <p>Lagersaldo: {data.amount}st</p>
                                     <h2>{data.price}:-</h2>
                                 </div>
                                 <div className="card-action">
-                                <div className="col s2">
-                                <input 
-                                    onChange={(e)=>setAmount(e.target.value)}
-                                    placeholder="välj antal" 
-                                    type="number" min="1" 
-                                    max="100"/>
-                                </div>
-                                <a onClick={addToCart} class="waves-effect waves-light btn right">LÄGG TILL I VARUKORG</a>
+                                    <div className="col s2">
+                                        <input
+                                            onChange={(e) => setAmount(e.target.value)}
+                                            placeholder="välj antal"
+                                            type="number" min="1"
+                                            max="100" />
+                                    </div>
+                                    <a onClick={addToCart} className="waves-effect waves-light btn right">
+                                        LÄGG TILL </a>
                                 </div>
                             </div>
                         </div>
