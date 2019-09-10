@@ -41,13 +41,12 @@ function Details(props) {
     }, [item])
 
     function addToCart() {
-        setAmount(0);
         setItem(item => [...item, {
             name: data.name,
             amount: amount,
             price: data.price
         }])
-
+        setAmount(0);
     }
 
     return (
