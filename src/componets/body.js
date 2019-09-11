@@ -8,7 +8,6 @@ function Body(props) {
     useEffect(() => {
         setData(props.beer)
         setLoading(false);
-        console.log(props.beer);
         return () => {
           setLoading(true);
           }
@@ -22,7 +21,7 @@ function Body(props) {
                     : data.map(product => {
                         return (
                             <div key={product._id} className="col s4">
-                                <div className="card large">
+                                <div className="card medium">
                                     <div className="card-image">
                                         <img className="responsive-img" src={"http://localhost:8080/" + product.image.path} alt="" />
                                     </div>

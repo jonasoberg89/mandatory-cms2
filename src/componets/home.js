@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Body from "./body";
 import axios from "axios";
+import Classnames from "classnames"
 
 
-function Home() {
+function Home(props) {
 
     const [data, setData] = useState([]);
     const [checked, setChecked] = useState(false);
     const [search, setSearch] = useState("");
     const [perPage, setPerPage] = useState(0);
     const pageNumbers = [];
-    const[pageNumber, setPageNumber] = useState(1)
-
+    const [pageNumber, setPageNumber] = useState(1)
+    props.match.params = pageNumber;
     useEffect(() => {
-        console.log("tjena")
         if (!checked) {
             let fetchData = async () => {
                 let result = await axios(
-                    'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c&limit=9&skip='+pageNumber+'&filter[name][$regex]=' + search
-                );
+                    'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c&filter[name][$regex]=' + search + '&limit=9&skip=' + (pageNumber - 1) * 9);
                 setData(result.data.entries);
-                setPerPage(Math.ceil(result.data.entries.length / 9));
+                setPerPage(Math.ceil(result.data.total / 9));
             };
             fetchData();
         } else {
@@ -36,22 +35,29 @@ function Home() {
         return () => {
             console.log("Unmount");
         }
-    }, [checked, search]);
+    }, [checked, search, pageNumber]);
 
-    function pagination(){
+    function pagination() {
 
         for (let i = 1; i <= perPage; i++) {
             pageNumbers.push(i);
         }
-        console.log(pageNumbers)
         const renderPageNumbers = pageNumbers.map(number => {
             return (
-                <li key={number} onClick={(number)=>{setPageNumber(number)}} className="active"><a href="#!"id={number}>{number}</a></li>
+                <li key={number}
+                    onClick={() => setPageNumber(number)}
+                    className={Classnames("waves-effect", {
+                        "active": pageNumber === number
+                    })}>
+                    <a href={"#page" + number} id={number}>
+                        {number}
+                    </a>
+                </li>
             )
         });
         return renderPageNumbers
     }
- 
+
     return (
         <div>
             <div className="row">
@@ -60,7 +66,10 @@ function Home() {
                     <div className="input-field">
                         <input id="input_text"
                             value={search}
-                            onChange={event => setSearch(event.target.value)}
+                            onChange={(event) => {
+                                setPageNumber(1);
+                                setSearch(event.target.value);
+                            }}
                             type="text" />
                         <label htmlFor="textarea1">Search</label>
                     </div>
@@ -78,15 +87,25 @@ function Home() {
                 </div>
             </div>
             <Body beer={data} />
-                <div className="col s12">
-                    <ul className="pagination center">
-                        <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
-                        {
-                            pagination()
-                        }
-                        <li className="waves-effect"><a href="#!"><i className="material-icons">chevron_right</i></a></li>
-                    </ul>
-                </div>
+            <div className="col s12">
+                <ul className="pagination center">
+                    <li className="waves-effect"
+                        onClick={(() => {
+                            if (pageNumber <= 1) return
+                            else { setPageNumber(pageNumber - 1) }
+                        })}>
+                        <i className="material-icons">chevron_left</i></li>
+                    {
+                        pagination()
+                    }
+                    <li className="waves-effect"
+                        onClick={(() => {
+                            if (pageNumber >= perPage) return
+                            else { setPageNumber(pageNumber + 1) }
+                        })}>
+                        <i className="material-icons">chevron_right</i></li>
+                </ul>
+            </div>
         </div>
     );
 }
