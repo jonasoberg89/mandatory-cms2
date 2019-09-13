@@ -15,9 +15,10 @@ function Cart(props) {
     const [loading, setLoading] = useState(true)
     const [totalPrice, setTotalPrice] = useState();
     const [cart, setCart] = useState([])
-    const [product, setProduct] = useState([]);
+    const [product, setProduct] = useState([""]);
 
     useEffect(() => {
+        if(product === null)return
         setLoading(false);
         const total = product.reduce((total, data) => total + parseInt(data.amount * data.price), 0)
         setTotalPrice(total);
@@ -35,22 +36,30 @@ function Cart(props) {
     }, []);
 
 
-    function orderFunction() {
-
+    function orderFunction(e) {
+        e.preventDefault();
         axios.post("http://localhost:8080/api/collections/save/orders?token=dd9a8d75bef9abea2c7a79bc3be82c",
             {
                 data: {
                     "name": name,
                     "adress": adress,
                     "price": totalPrice,
-                    "products": {
-                        product
-                    }
+                    "products":  
+                        product.map(val =>{
+                            return(
+                                {value:{
+                                    name:val.name,
+                                    amount:val.amount,
+                                    price:val.price
+                                }
+                                }
+                            )
+                        })
+                    
                 }
             })
             .then(res => {
                 updateOrder(null);
-                const [loading, setLoading] = useState(true)
             }).catch(err => {
                 console.log(err);
             })
@@ -67,12 +76,28 @@ function Cart(props) {
         updateOrder(newData);
     }
 
+    function renderCart(){
+        if(product === null) return
+      let render =   product.map(product => {
+            return (
+                <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.amount}</td>
+                    <td>{product.price}</td>
+                    <td onClick={(e) => { removeItem(product.id) }}><i className={`material-icons ${Styles['remove_item']}`}>remove_circle_outline</i></td>
+                </tr>
+            )
+    })
+    return render;
+}
+
     return (
         <div className="row">
             <h1 className="center">Varukogen</h1>
             <div className="col s2"></div>
             <div className="col s8">
                 <div className="row ">
+
                     <table>
                         <thead>
                             <tr>
@@ -82,18 +107,7 @@ function Cart(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {loading ? <tr><td>Din varukorg är tom!</td></tr>
-                                : product.map(product => {
-                                    return (
-                                        <tr key={product.id}>
-                                            <td>{product.name}</td>
-                                            <td>{product.amount}</td>
-                                            <td>{product.price}</td>
-                                            <td onClick={() => { removeItem(product.id) }}><i className={`material-icons ${Styles['remove_item']}`}>remove_circle_outline</i></td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                            {loading ? <tr><td>Din varukorg är tom!</td></tr>:renderCart()}
                         </tbody>
                     </table>
                     <div className="col s12">

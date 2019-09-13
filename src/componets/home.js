@@ -13,6 +13,7 @@ function Home(props) {
     const pageNumbers = [];
     const [pageNumber, setPageNumber] = useState(1)
     props.match.params = pageNumber;
+    
     useEffect(() => {
         if (!checked) {
             let fetchData = async () => {
@@ -30,11 +31,19 @@ function Home(props) {
                 setData(result.data.entries);
             };
             fetchData();
-
+            
         }
+        let myData = async () => {
+            let result = await axios(
+                'http://localhost:8080/api/collections/get/orders?token=dd9a8d75bef9abea2c7a79bc3be82c',
+            );
+           console.log(result.data)
+        };
+        myData();
         return () => {
             console.log("Unmount");
         }
+
     }, [checked, search, pageNumber]);
 
     function pagination() {
