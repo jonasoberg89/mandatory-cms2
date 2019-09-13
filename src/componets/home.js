@@ -4,6 +4,7 @@ import axios from "axios";
 import Classnames from "classnames"
 
 
+
 function Home(props) {
 
     const [data, setData] = useState([]);
@@ -20,6 +21,7 @@ function Home(props) {
                 let result = await axios(
                     'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c&filter[name][$regex]=' + search + '&limit=9&skip=' + (pageNumber - 1) * 9);
                 setData(result.data.entries);
+                console.log(result)
                 setPerPage(Math.ceil(result.data.total / 9));
             };
             fetchData();

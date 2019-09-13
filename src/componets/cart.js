@@ -38,19 +38,20 @@ function Cart(props) {
 
     function orderFunction(e) {
         e.preventDefault();
+        if(name.length === 0|| adress.length === 0||product.length===0)return;
         axios.post("http://localhost:8080/api/collections/save/orders?token=dd9a8d75bef9abea2c7a79bc3be82c",
             {
                 data: {
                     "name": name,
                     "adress": adress,
-                    "price": totalPrice,
+                    "price": totalPrice + "sek",
                     "products":  
                         product.map(val =>{
                             return(
                                 {value:{
                                     name:val.name,
-                                    amount:val.amount,
-                                    price:val.price
+                                    amount:val.amount + "st",
+                                    price:val.price + "sek"
                                 }
                                 }
                             )
@@ -60,6 +61,7 @@ function Cart(props) {
             })
             .then(res => {
                 updateOrder(null);
+                props.history.push("/complete");
             }).catch(err => {
                 console.log(err);
             })

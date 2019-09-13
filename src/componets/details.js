@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import Review from "./review";
 function Details(props) {
 
     const [loading, setLoading] = useState(true);
@@ -14,6 +15,7 @@ function Details(props) {
                 'http://localhost:8080/api/collections/get/products?token=dd9a8d75bef9abea2c7a79bc3be82c&filter[_id]=' + productId
             );
             setData(result.data.entries[0]);
+            console.log(result)
             setLoading(false);
         };
         fetchData();
@@ -80,9 +82,10 @@ function Details(props) {
                                 </div>
                             </div>
                         </div>
+                        <Review id={productId} />
                     </div>
                 }
-
+               
             </div>
             <div className="col s2"></div>
 

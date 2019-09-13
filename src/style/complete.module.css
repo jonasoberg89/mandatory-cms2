@@ -1,0 +1,15 @@
+.background {
+    height: 100vh;
+    background-image: url("https://images8.alphacoders.com/413/413078.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.info{
+    margin-top: 100px;
+}
+
+.click{
+    cursor: pointer;
+    text-decoration: underline;
+}
