@@ -4,6 +4,7 @@ import axios from "axios";
 function Rewiev(props) {
     const [loading, setLoading] = useState(true);
     const[ data, setData] = useState([])
+    const [rating, setRating] = useState([])
 
     useEffect(() => {
         let fetchData = async () => {
@@ -11,16 +12,31 @@ function Rewiev(props) {
             let result = await axios(
                 'http://localhost:8080/api/collections/get/rewiev?token=dd9a8d75bef9abea2c7a79bc3be82c'
             );
-            setData(result.data.entries[0]);
+            setData(result.data.entries);
             console.log(result)
-            setLoading(false);
+            
         };
         fetchData();
         return () => {
             console.log("Unmount");
             setLoading(true);
         }
-    }, []);
+    }, [props.id]);
+
+    useEffect(()=>{
+        let newData = []
+        data.map(rating =>{
+            return rating.link.filter(id =>{
+               if(id._id === props.id){
+                   newData.push(rating);
+               }
+            })
+        })
+        setRating(newData)
+        if(!rating.length) return;
+        setLoading(false);
+      
+    },[data])
 
     return (
 
@@ -28,23 +44,19 @@ function Rewiev(props) {
             <h6>Kommentarer</h6>
             <div className="card darken-1">
                 <div className="card-content   ">
-                    <span className="card-title">Card Title</span>
-                    <p>I am a very simple card.
-                       I am good at containing small bits of information.
-                       I am convenient because I require little markup to
-                       use effectively.
-                     </p>
-
+                {loading ? <h6>Inga Kommentarer...</h6>
+                    : rating.map(rate => {
+                        return (
+                            <div key={rate._id}>
+                            <span className="card-title">{rate.title}</span>
+                            <p>{rate.body}</p>
+                            <p>Rate:{rate.rating}</p>
+                            </div>
+                        )
+                    })
+                }
                 </div>
-                <div className="card-content   ">
-                    <span className="card-title">Card Title</span>
-                    <p>I am a very simple card.
-                       I am good at containing small bits of information.
-                       I am convenient because I require little markup to
-                       use effectively.
-                     </p>
-
-                </div>
+                
             </div>
         </div>
 

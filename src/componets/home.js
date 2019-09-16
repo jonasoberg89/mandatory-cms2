@@ -100,21 +100,11 @@ function Home(props) {
             <Body beer={data} />
             <div className="col s12">
                 <ul className="pagination center">
-                    <li className="waves-effect"
-                        onClick={(() => {
-                            if (pageNumber <= 1) return
-                            else { setPageNumber(pageNumber - 1) }
-                        })}>
-                        <i className="material-icons">chevron_left</i></li>
+               
                     {
                         pagination()
                     }
-                    <li className="waves-effect"
-                        onClick={(() => {
-                            if (pageNumber >= perPage) return
-                            else { setPageNumber(pageNumber + 1) }
-                        })}>
-                        <i className="material-icons">chevron_right</i></li>
+                
                 </ul>
             </div>
         </div>

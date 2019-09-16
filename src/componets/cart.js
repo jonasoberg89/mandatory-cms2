@@ -44,7 +44,7 @@ function Cart(props) {
                 data: {
                     "name": name,
                     "adress": adress,
-                    "price": totalPrice + "sek",
+                    "price": totalPrice,
                     "products":  
                         product.map(val =>{
                             return(
