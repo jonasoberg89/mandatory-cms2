@@ -120,6 +120,7 @@ function Cart(props) {
                             <div className="input-field col s6 ">
                                 <i className="material-icons prefix">account_circle</i>
                                 <input
+                                    value={name}
                                     onChange={(e => setName(e.target.value))}
                                     id="icon_prefix"
                                     type="text"
@@ -129,6 +130,7 @@ function Cart(props) {
                             <div className="input-field col s6">
                                 <i className="material-icons prefix">house</i>
                                 <input
+                                    value={adress}
                                     onChange={(e => setAdress(e.target.value))}
                                     id="icon_house"
                                     type="text"

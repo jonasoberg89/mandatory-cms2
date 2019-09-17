@@ -8,12 +8,10 @@ function Rewiev(props) {
 
     useEffect(() => {
         let fetchData = async () => {
-            console.log(props.id)
             let result = await axios(
                 'http://localhost:8080/api/collections/get/rewiev?token=dd9a8d75bef9abea2c7a79bc3be82c'
             );
             setData(result.data.entries);
-            console.log(result)
             
         };
         fetchData();
@@ -24,6 +22,7 @@ function Rewiev(props) {
     }, [props.id]);
 
     useEffect(()=>{
+        console.log("tjena")
         let newData = []
         data.map(rating =>{
             return rating.link.filter(id =>{
@@ -33,7 +32,8 @@ function Rewiev(props) {
             })
         })
         setRating(newData)
-        if(!rating.length) return;
+        console.log(newData)
+
         setLoading(false);
       
     },[data])

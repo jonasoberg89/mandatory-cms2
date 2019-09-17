@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Review from "./review";
+import Comment from "./comment";
 function Details(props) {
 
     const [loading, setLoading] = useState(true);
@@ -82,6 +83,7 @@ function Details(props) {
                                 </div>
                             </div>
                         </div>
+                        <Comment id={productId} beer={data.name} />
                         <Review id={productId} />
                     </div>
                 }
