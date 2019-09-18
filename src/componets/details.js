@@ -9,7 +9,7 @@ function Details(props) {
     const [amount, setAmount] = useState(0)
     let productId = props.match.params.id
     const [item, setItem] = useState([])
-
+    const  [update, setUpdate] = useState(false);
     useEffect(() => {
         let fetchData = async () => {
             let result = await axios(
@@ -24,7 +24,7 @@ function Details(props) {
             console.log("Unmount");
             setLoading(true);
         }
-    }, [productId]);
+    }, [productId, update]);
 
 
     useEffect(() => {
@@ -84,7 +84,7 @@ function Details(props) {
                             </div>
                         </div>
                         <Comment id={productId} beer={data.name} />
-                        <Review id={productId} />
+                        <Review id={productId}  />
                     </div>
                 }
                

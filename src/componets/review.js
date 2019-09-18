@@ -3,8 +3,8 @@ import axios from "axios";
 
 function Rewiev(props) {
     const [loading, setLoading] = useState(true);
-    const[ data, setData] = useState([])
-    const [rating, setRating] = useState([])
+    const[ data, setData] = useState([]);
+    const [rating, setRating] = useState([]);
 
     useEffect(() => {
         let fetchData = async () => {

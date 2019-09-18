@@ -13,7 +13,6 @@ function Comment(props) {
     }, [props.id]);
 
     function addComment(e) {
-        console.log(props.beer)
         e.preventDefault();
         if (title.length === 0 || comment.length === 0 || rank === null) return;
         axios.post("http://localhost:8080/api/collections/save/rewiev?token=dd9a8d75bef9abea2c7a79bc3be82c",
@@ -60,6 +59,8 @@ function Comment(props) {
                             value={rank}
                             onChange={(e => setRank(e.target.value))}
                             id="icon_prefix"
+                            min ="0"
+                            max = "5"
                             type="number"
                             className="validate" />
                         <label htmlFor="icon_prefix">Rank</label>
